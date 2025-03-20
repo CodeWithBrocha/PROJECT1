@@ -4,14 +4,14 @@ const todosModels = require("../models/todosModels");
 const todoController = require("../controllers/todoController");
 
 //קבלת כל המשימות
-router.get("/", todoController.getAllTodos)
+router.get("/", taskController.getAllTasks)
 //יצירת משימה חדשה
-router.post("/", todoController.createTodo)
+router.post("/", taskController.createTask)
 //עדכון משימה לפי ID
-router.put("/id", todoController.updateTodo)
+router.put("/id", taskController.updateTask)
 //מחיקת משימה לפי ID
-router.delete("/id", todoController.deleteTodo)
+router.delete("/id", taskController.deleteTask)
 //סימון משימה כהושלמה
-router.put("/complete/:id", todoController.markTodoAsCompleted)
+router.put("/complete/:id", taskController.markTaskAsCompleted)
 
 module.exports=router

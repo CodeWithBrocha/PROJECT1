@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const photoModels = require("../models/photoModels")
-const photoController=require("../controllers/photoController")
+const photoModels = require("../PROJECT1/models/photoModels")
+const photoController=require("../PROJECT1/controllers/photoController")
 
 // קבלת כל התמונות
 router.get("/", photoController.getAllPhotos)

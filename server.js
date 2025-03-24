@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/dbConn");
 const PORT = process.env.PORT || 2000;
@@ -13,7 +14,7 @@ app.use(express.json()); // חובה כדי לקרוא body בבקשות POST/PU
 app.use(express.urlencoded({ extended: true })); // לטיפול בנתונים מקודדים בטופס
 
 const userRout = require("./routes/userRout");
-const todosRout = require("./routes/todosRout");
+const taskRout = require("./routes/taskRout");
 const postRout = require("./routes/postRout");
 const photoRout = require("./routes/photoRout");
 

@@ -1,4 +1,4 @@
-const postModels = require("../models/taskModels");
+const taskModels = require("../models/taskModels");
 
 const createTask = async (req, res) => {
     const { title,tags,complete } = req.body
@@ -6,7 +6,7 @@ const createTask = async (req, res) => {
         return res.status(400).json({ message: 'title is required' })
     }
     const taskRout = await taskModels.create({
-         title,body
+         title,tags
     })
     if (taskRout) { 
         return res.status(201).json({ message: 'New task created' })
@@ -24,24 +24,31 @@ const getAllTasks = async (req, res) => {
 }
 
 const updateTask = async (req, res) => {
-    const { _id, title,tags,complete} = req.body
-    if (!_id || !title) {
+    try{
+    const { id } = req.params;
+    const { title,tags,complete} = req.body;
+    console.log("id:",id);
+    if (!id || !title) {
         return res.status(400).json({
             message: 'fields are required'
         })
     }
-    const taskRout = await taskModels.findById(_id).exec()
-    if (!taskRout) {
-        return res.status(400).json({ message: 'task not found' })
+    const task = await taskModels.findById(id);
+    if (!task) {
+        return res.status(404).json({ message: 'task not found' })
     }
-    taskRoutRout.title = title
-    taskRoutRout.tags = tags
-    taskRoutRout.complete = complete
-    const updateTask = await taskRout.save()
-    res.json(`'${updateTask.title}' updated`)
+    if(title)task.title = title
+    if(tags)task.tags = tags
+    if(complete!==undefined)task.complete = complete;
+    const updateTask = await task.save()
+    res.json({massage:`'${updateTask.title}' updated`,updateTask})
+} catch (err) {
+    console.error("❌ שגיאה בעדכון משימה:", err);
+    res.status(500).json({ message: "❌ שגיאת שרת פנימית" });
 }
+};
 const deleteTask = async (req, res) => {
-    const { id } = req.body
+    const { id } = req.params
     const taskRout = await taskModels.findById(id).exec()
     if (!taskRout) {
         return res.status(400).json({ message: 'task not found' })
@@ -52,7 +59,7 @@ const deleteTask = async (req, res) => {
 }
 const markTaskAsCompleted = async (req, res) => {
     const { id } = req.params
-    const taskRout = await todosModels.findById(id).exec()
+    const taskRout = await taskModels.findById(id).exec()
     if (!taskRout) {
         return res.status(400).json({ message: 'tasks not found' })
     }
@@ -60,8 +67,6 @@ const markTaskAsCompleted = async (req, res) => {
     const updateTask = await taskRout.save()
     res.json(`'${updateTask.name}' updated`)
 }
-
-
 module.exports = {
     getAllTasks,
     createTask,
